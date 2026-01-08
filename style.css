@@ -1,0 +1,48 @@
+body {
+        margin: 0;
+        background: gray;
+        color: black;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+    }
+
+    h1 { margin-bottom: 10px; }
+
+    #board {
+        width: 360px;
+        margin: 20px auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .card {
+        background: black;
+        border: 2px solid teal;
+        font-size: 32px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        transition: background .3s;
+    }
+
+    .revealed {
+        background: teal;
+    }
+
+    #win {
+        font-size: 22px;
+        margin-top: 15px;
+        display: none;
+        color: white;
+    }
+
+    #restart {
+        margin-top: 15px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
