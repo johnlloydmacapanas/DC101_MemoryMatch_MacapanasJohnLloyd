@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css"</>
+    <title>Mini Arcade</title>
+</head>
+<body>
+    <h1>Memory Match</h1>
+
+<div id="board"></div>
+
+<div id="win">🎉 You matched the game!</div>
+<button id="restart">Restart</button>
+
+
+<style>
+    body {
+        margin: 0;
+        background: gray;
+        color: black;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+    }
+
+    h1 { margin-bottom: 10px; }
+
+    #board {
+        width: 360px;
+        margin: 20px auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .card {
+        background: black;
+        border: 2px solid teal;
+        font-size: 32px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        transition: background .3s;
+    }
+
+    .revealed {
+        background: teal;
+    }
+
+    #win {
+        font-size: 22px;
+        margin-top: 15px;
+        display: none;
+        color: white;
+    }
+
+    #restart {
+        margin-top: 15px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+const board = document.getElementById("board");
+const restart = document.getElementById("restart");
+const win = document.getElementById("win");
+
+let first = null;
+let second = null;
+let lock = false;
+let matches = 0;
+
+const symbols = ["🐶","🐺","🐼","🐨","🐱","🦊","🐥","🐰"];
+
+function setupGame() {
+    win.style.display = "none";
+    board.innerHTML = "";
+    matches = 0;
+    first = null;
+    second = null;
+
+    const deck = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+
+    deck.forEach(symbol => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.dataset.symbol = symbol;
+        card.textContent = "";
+        card.addEventListener("click", () => handleFlip(card));
+        board.appendChild(card);
+    });
+}
+
+function handleFlip(card) {
+    if (lock || card === first || card.classList.contains("revealed")) return;
+
+    card.textContent = card.dataset.symbol;
+    card.classList.add("revealed");
+
+    if (!first) {
+        first = card;
+        return;
+    }
+
+    second = card;
+    lock = true;
+
+    if (first.dataset.symbol === second.dataset.symbol) {
+        first = null;
+        second = null;
+        lock = false;
+        matches++;
+
+        if (matches === symbols.length) {
+            win.style.display = "block";
+        }
+    } else {
+        setTimeout(() => {
+            first.textContent = "";
+            second.textContent = "";
+            first.classList.remove("revealed");
+            second.classList.remove("revealed");
+            first = null;
+            second = null;
+            lock = false;
+        }, 800);
+    }
+}
+
+restart.addEventListener("click", setupGame);
+
+// Start the first game
+setupGame();
+</script>
+<script lang="javascript" src="script.js"></script>
+</body>
+</html>
